@@ -3,13 +3,15 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import InputGroup from "react-bootstrap/InputGroup";
 import { Eye, EyeOff } from "lucide-react";
 
 function Login() {
   const navigate = useNavigate();
+  const emailRef = useRef(null);
+  //  const passwordRef = useRef(null);
   const [status, setStatus] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,6 +20,9 @@ function Login() {
   const handleClick = async (e) => {
     e.preventDefault();
     setStatus("Sending request...");
+
+    emailRef.current?.setCustomValidity("");
+    //    passwordRef.current?.setCustomValidity("");
 
     try {
       const res = await fetch("http://localhost:3001/login", {
@@ -31,8 +36,14 @@ function Login() {
 
       const data = await res.json();
 
-      if (res.status == 200) {
+      if (res.ok) {
         navigate("/");
+        return;
+      }
+
+      if (res.status === 401) {
+        emailRef.current.setCustomValidity("Email or password is wrong.");
+        emailRef.current.reportValidity();
         return;
       }
 
@@ -54,10 +65,14 @@ function Login() {
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Email</Form.Label>
                 <Form.Control
+                  ref={emailRef}
                   type="email"
                   placeholder="Enter email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    emailRef.current?.setCustomValidity("");
+                  }}
                   required
                 />
               </Form.Group>
@@ -67,7 +82,10 @@ function Login() {
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    emailRef.current?.setCustomValidity("");
+                  }}
                   required
                 />
               </Form.Group>

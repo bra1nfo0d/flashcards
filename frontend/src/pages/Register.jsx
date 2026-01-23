@@ -24,7 +24,7 @@ export default function Register() {
     setStatus("Sending request...");
 
     emailRef.current?.setCustomValidity("");
-    username.current?.setCustomValidity("");
+    usernameRef.current?.setCustomValidity("");
 
     if (password !== repeatPassword) {
       setError("Passwords do not match");
@@ -45,7 +45,7 @@ export default function Register() {
 
       const data = await res.json();
 
-      if (res.status == 200) {
+      if (res.ok) {
         navigate("/");
         return;
       }

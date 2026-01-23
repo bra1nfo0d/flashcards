@@ -37,7 +37,10 @@ app.post("/login", async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials." });
     }
 
-    return res.status(200).json({ message: "Backend received login request" });
+    return res.status(200).json({
+      message: "Login succesful",
+      user: { id: user.id, username: user.username, email: user.email },
+    });
   } catch (err) {
     return res.status(500).json({ message: "Server error." });
   }
@@ -63,11 +66,19 @@ app.post("/register", async (req, res) => {
       VALUES (?, ?, ?)
       `);
 
-    stmt.run(email.toLowerCase().trim(), username.trim(), password_hash);
+    const cleanEmail = email.toLowerCase().trim();
+    const cleanUsername = username.trim();
 
-    return res
-      .status(200)
-      .json({ message: "Backend received register request" });
+    const result = stmt.run(cleanEmail, cleanUsername, password_hash);
+
+    return res.status(200).json({
+      message: "Register succesful",
+      body: {
+        id: result.lastInsertRowid,
+        username: cleanUsername,
+        email: cleanEmail,
+      },
+    });
   } catch (err) {
     if (String(err).includes("UNIQUE")) {
       const msg = String(err);
