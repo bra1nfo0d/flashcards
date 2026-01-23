@@ -5,8 +5,10 @@ import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../auth/AuthContext";
 
 export default function Register() {
+  const { login } = useAuth();
   const navigate = useNavigate();
   const [error, setError] = useState("");
   const [status, setStatus] = useState("");
@@ -46,6 +48,7 @@ export default function Register() {
       const data = await res.json();
 
       if (res.ok) {
+        login(data.user)
         navigate("/");
         return;
       }

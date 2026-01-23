@@ -5,10 +5,10 @@ import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import InputGroup from "react-bootstrap/InputGroup";
-import { Eye, EyeOff } from "lucide-react";
+import { useAuth } from "../auth/AuthContext";
 
 function Login() {
+  const { login } = useAuth();
   const navigate = useNavigate();
   const emailRef = useRef(null);
   //  const passwordRef = useRef(null);
@@ -37,6 +37,7 @@ function Login() {
       const data = await res.json();
 
       if (res.ok) {
+        login(data.user);
         navigate("/");
         return;
       }

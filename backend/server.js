@@ -73,7 +73,7 @@ app.post("/register", async (req, res) => {
 
     return res.status(200).json({
       message: "Register succesful",
-      body: {
+      user: {
         id: result.lastInsertRowid,
         username: cleanUsername,
         email: cleanEmail,
