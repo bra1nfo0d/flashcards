@@ -4,7 +4,10 @@ import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
 import { useAuth } from "../auth/AuthContext";
+import { Children } from "react";
 
 function AppNavbar() {
   const { user, logout } = useAuth();
@@ -13,6 +16,37 @@ function AppNavbar() {
   const handleLogout = () => {
     logout();
     navigate("/login");
+  };
+
+  const ProtectedNavLink = ({ to, children }) => {
+    const disabled = !user;
+
+    const link = (
+      <span className={disabled ? "d-inline-block" : ""}>
+        <Nav.Link
+          as={Link}
+          to={disabled ? "#" : to}
+          disabled={disabled}
+          onClick={(e) => {
+            if (disabled) e.preventDefault();
+          }}
+          style={disabled ? { pointerEvents: "none" } : {}}
+        >
+          {children}
+        </Nav.Link>
+      </span>
+    );
+
+    if (!disabled) return link;
+
+    return (
+      <OverlayTrigger
+        placement="bottom"
+        overlay={<Tooltip>need to be logged in</Tooltip>}
+      >
+        {link}
+      </OverlayTrigger>
+    );
   };
 
   return (
@@ -28,15 +62,9 @@ function AppNavbar() {
             style={{ maxHeight: "100px" }}
             navbarScroll
           >
-            <Nav.Link as={Link} to="/files" href="#features">
-              My Files
-            </Nav.Link>
-            <Nav.Link as={Link} to="/library" href="#features">
-              Library
-            </Nav.Link>
-            <Nav.Link as={Link} to="/stats" href="#features">
-              Stats
-            </Nav.Link>
+            <ProtectedNavLink to="/files">My Files</ProtectedNavLink>
+            <ProtectedNavLink to="/library">Library</ProtectedNavLink>
+            <ProtectedNavLink to="/stats">Stats</ProtectedNavLink>
           </Nav>
           <Form className="d-flex">
             {!user ? (
