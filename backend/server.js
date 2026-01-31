@@ -25,7 +25,7 @@ app.post("/login", async (req, res) => {
     }
 
     const user = db
-      .prepare(`SELECT id, email, password_hash FROM users WHERE email = ?`)
+      .prepare(`SELECT id, email, username, password_hash FROM users WHERE email = ?`)
       .get(email.toLowerCase().trim());
 
     if (!user) {

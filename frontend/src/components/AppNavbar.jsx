@@ -7,7 +7,6 @@ import Navbar from "react-bootstrap/Navbar";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import { useAuth } from "../auth/AuthContext";
-import { Children } from "react";
 
 function AppNavbar() {
   const { user, logout } = useAuth();
@@ -83,6 +82,9 @@ function AppNavbar() {
               </>
             ) : (
               <>
+                <Navbar.Text className="me-3">
+                  <strong>{user.username}</strong>
+                </Navbar.Text>
                 <Button variant="outline-danger" onClick={handleLogout}>
                   Logout
                 </Button>
