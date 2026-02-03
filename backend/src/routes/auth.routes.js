@@ -1,20 +1,13 @@
 const express = require("express");
-const app = express();
-const PORT = process.env.PORT || 3001;
 const bycrypt = require("bcrypt");
-const db = require("./db/initDb");
-const cors = require("cors");
+//const jwt = require("jsonwebtoken");
+const db = require("../db");
+//cosnt {JWT_SECRET} = require("../middleware/auth.middleware")
 
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-  }),
-);
-
-app.use(express.json());
+const router = express.Router();
 
 // login request
-app.post("/login", async (req, res) => {
+router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -49,7 +42,7 @@ app.post("/login", async (req, res) => {
 });
 
 // register request
-app.post("/register", async (req, res) => {
+router.post("/register", async (req, res) => {
   try {
     const { email, username, password, repeatPassword } = req.body;
 
@@ -106,4 +99,4 @@ app.post("/register", async (req, res) => {
   }
 });
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+module.exports = router;
