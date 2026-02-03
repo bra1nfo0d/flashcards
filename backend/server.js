@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 3001;
 const bycrypt = require("bcrypt");
-const db = require("./db/db");
+const db = require("./db/initDb");
 const cors = require("cors");
 
 app.use(
@@ -25,7 +25,9 @@ app.post("/login", async (req, res) => {
     }
 
     const user = db
-      .prepare(`SELECT id, email, username, password_hash FROM users WHERE email = ?`)
+      .prepare(
+        `SELECT id, email, username, password_hash FROM users WHERE email = ?`,
+      )
       .get(email.toLowerCase().trim());
 
     if (!user) {
