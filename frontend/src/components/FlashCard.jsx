@@ -76,59 +76,104 @@ const introFalshCards = [
   },
 ];
 
-function insertAtOrEnd(arr, item, index) {
-  const safeIndex = Math.min(Math.max(index, 0), arr.length);
-  const copy = arr.slice();
-  copy.splice(safeIndex, 0, item);
-  return copy;
-}
-
 function FlashCard() {
-  const totalCards = introFalshCards.length;
   const [queue, setQueue] = useState(introFalshCards);
-  
-
-
-
-
-
-  const [active, setActive] = useState(introFalshCards);
-  const [finished, setFinished] = useState([]);
-  const [good, setGood] = useState([]);
-  const [hard, setHard] = useState([]);
-  const [wrong, setWrong] = useState([]);
   const [isRevealed, setIsRevealed] = useState(false);
+  const current = queue[0];
 
-  const current = active[0];
-  const total = introFalshCards.length;
+  // perc values
+  const [finishedArr, setFinishedArr] = useState([]);
+  const [goodArr, setGoodArr] = useState([]);
+  const [hardArr, setHardArr] = useState([]);
+  const [wrongArr, setWrongArr] = useState([]);
+  const totalCards = introFalshCards.length;
 
-  const handleAnswer = (type) => {
-    if (!current) return;
-
+  function handleAnswer(type) {
     setIsRevealed(false);
 
-    setActive((prev) => prev.slice(1));
+    const [card, ...rest] = queue;
+    setQueue(rest);
 
-    if (type === "finished") setFinished((p) => [...p, current]);
-    if (type === "good") setGood((p) => [...p, current]);
-    if (type === "hard") setHard((p) => [...p, current]);
-    if (type === "wrong") setWrong((p) => [...p, current]);
-  };
+    if (!(type === "finished")) {
+      const distance =
+        type === "good" ? 10 : type === "hard" ? 5 : type === "wrong" ? 3 : 0;
+      findSaveIndex(distance, card);
+    }
+    calcPerc(current.id, type);
+  }
 
-  const perc = (n) => (n / total) * 100;
+  function findSaveIndex(targetIndex, card) {
+    if (targetIndex > queue.length) {
+      setQueue((prevQueue) => {
+        const newQueue = [...prevQueue];
+        newQueue.splice(queue.length, 0, card);
+        return newQueue;
+      });
+    } else {
+      setQueue((prevQueue) => {
+        const newQueue = [...prevQueue];
+        newQueue.splice(targetIndex, 0, card);
+        return newQueue;
+      });
+    }
+  }
+
+  function changeAnswerStack(id, type) {
+    if (type === "finished") {
+      setFinishedArr((prevArr) => [...prevArr, id]);
+    } else if (type === "good") {
+      setGoodArr((prevArr) => [...prevArr, id]);
+    } else if (type === "hard") {
+      setHardArr((prevArr) => [...prevArr, id]);
+    } else if (type === "wrong") {
+      setWrongArr((prevArr) => [...prevArr, id]);
+    }
+  }
+
+  function removeIdFromAllStacks(id) {
+    setFinishedArr((prevArr) => prevArr.filter((x) => x !== id));
+    setGoodArr((prevArr) => prevArr.filter((x) => x !== id));
+    setHardArr((prevArr) => prevArr.filter((x) => x !== id));
+    setWrongArr((prevArr) => prevArr.filter((x) => x !== id));
+  }
+
+  function calcPerc(id, type) {
+    removeIdFromAllStacks(id);
+    changeAnswerStack(id, type);
+  }
 
   if (!current) {
-    return <h3>All Cards Finished</h3>;
+    return <h3>Finished</h3>;
   }
 
   return (
     <>
       <div className="d-flex flex-column gap-3">
         <ProgressBar>
-          <ProgressBar variant="primary" now={perc(finished.length)} key={0} />
-          <ProgressBar variant="success" now={perc(good.length)} key={1} />
-          <ProgressBar variant="warning" now={perc(hard.length)} key={2} />
-          <ProgressBar variant="danger" now={perc(wrong.length)} key={3} />
+          <ProgressBar
+            variant="primary"
+            now={Math.round((finishedArr.length * 100) / totalCards)}
+            key={0}
+            label={`${Math.round((finishedArr.length * 100) / totalCards)}%`}
+          />
+          <ProgressBar
+            variant="success"
+            now={Math.round((goodArr.length * 100) / totalCards)}
+            key={1}
+            label={`${Math.round((goodArr.length * 100) / totalCards)}%`}
+          />
+          <ProgressBar
+            variant="warning"
+            now={Math.round((hardArr.length * 100) / totalCards)}
+            key={2}
+            label={`${Math.round((hardArr.length * 100) / totalCards)}%`}
+          />
+          <ProgressBar
+            variant="danger"
+            now={Math.round((wrongArr.length * 100) / totalCards)}
+            key={3}
+            label={`${Math.round((wrongArr.length * 100) / totalCards)}%`}
+          />
         </ProgressBar>
 
         {/* FRONT */}
@@ -147,7 +192,7 @@ function FlashCard() {
             <Card.Title
               style={{ visibility: isRevealed ? "visible" : "hidden" }}
             >
-              {current.backTitel}
+              {current.backTitle}
             </Card.Title>
             <Card.Text
               style={{ visibility: isRevealed ? "visible" : "hidden" }}
