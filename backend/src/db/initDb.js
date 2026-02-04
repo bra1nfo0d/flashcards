@@ -12,7 +12,10 @@ function initDb(db) {
 
       CREATE TABLE IF NOT EXISTS stacks (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL UNIQUE
+        folder_id INTEGER NULL,
+        name TEXT NOT NULL UNIQUE,
+        description TEXT,
+        FOREIGN KEY (folder_id) REFERENCES folders(id)
       );
 
       CREATE TABLE IF NOT EXISTS flashcards (
@@ -22,10 +25,18 @@ function initDb(db) {
         front_text TEXT NOT NULL,
         back_header TEXT,
         back_text TEXT NOT NULL,
-        FOREIGN KEY (stack_id) REFERENCES stacks(id)
+        FOREIGN KEY (stack_id) REFERENCES stacks(id) ON DELETE CASCADE
+      );
+
+      CREATE TABLE IF NOT EXISTS folders (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        parent_folder_id INTEGER NULL,
+        name TEXT NOT NULL,
+        description TEXT,
+        FOREIGN KEY (parent_folder_id) REFERENCES folders(id) ON DELETE CASCADE
       );
     `);
-  
+
   initDbContent(db);
 }
 

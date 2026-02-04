@@ -1,9 +1,21 @@
+import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import Card from "react-bootstrap/Card";
+import { createStack } from "../../api/stacks";
 
 export default function CreatingFolderForm() {
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+
+  async function handleSubmit() {
+    const stack = await createStack({
+      name,
+      description,
+    });
+  }
+
   return (
     <>
       <div className="d-flex flex-column align-items-center">
@@ -14,12 +26,19 @@ export default function CreatingFolderForm() {
               <Card.Title>Name</Card.Title>
               <InputGroup className="mb-3">
                 <Form.Control
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                   aria-label="Default"
                   aria-describedby="inputGroup-sizing-default"
                 />
               </InputGroup>
               <Card.Title>Beschreibung</Card.Title>
-              <Form.Control as="textarea" aria-label="With textarea" />
+              <Form.Control
+                value={description}
+				onChange={(e) => setDescription(e.target.value)}
+                as="textarea"
+                aria-label="With textarea"
+              />
               <Button className="mt-3" variant="primary">
                 Bestaetigen
               </Button>

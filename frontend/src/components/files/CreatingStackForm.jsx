@@ -1,9 +1,21 @@
+import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import Card from "react-bootstrap/Card";
+import { createStack } from "../../api/stacks";
 
 export default function CreatingStackFrom() {
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+
+  async function handleSubmit() {
+    await createStack({
+      name,
+      description,
+    });
+  }
+
   return (
     <>
       <div className="d-flex flex-column align-items-center">
@@ -14,14 +26,21 @@ export default function CreatingStackFrom() {
               <Card.Title>Name</Card.Title>
               <InputGroup className="mb-3">
                 <Form.Control
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                   aria-label="Default"
                   aria-describedby="inputGroup-sizing-default"
                 />
               </InputGroup>
               <Card.Title>Beschreibung</Card.Title>
-              <Form.Control as="textarea" aria-label="With textarea" />
-              <Button className="mt-3" variant="primary">
-                Bestaetigen
+              <Form.Control
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                as="textarea"
+                aria-label="With textarea"
+              />
+              <Button onClick={handleSubmit} className="mt-3" variant="primary">
+                Bestätigen
               </Button>
             </Card.Body>
           </Card>
@@ -30,11 +49,8 @@ export default function CreatingStackFrom() {
           <Card border="secondary" style={{ width: "18rem" }}>
             <Card.Header>Stapel</Card.Header>
             <Card.Body>
-              <Card.Title>Stapel-Name</Card.Title>
-              <Card.Text>
-                Stapel-Beschreibung. Diese Beschreibung enthaelt den Text von
-                oben.
-              </Card.Text>
+              <Card.Title>{name || "Stapel-Name"}</Card.Title>
+              <Card.Text>{description || "Beschreibung des Stapels"}</Card.Text>
             </Card.Body>
           </Card>
         </div>

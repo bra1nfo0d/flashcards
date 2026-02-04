@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { apiFetch, getToken } from "../api";
+import { apiFetch, getToken } from "../api/api";
 import AppNavbar from "../components/common/AppNavbar";
 import FlashCard from "../components/flashcards/FlashCard";
 
