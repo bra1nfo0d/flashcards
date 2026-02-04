@@ -1,70 +1,45 @@
 import { useState } from "react";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
-import Breadcrumb from "react-bootstrap/Breadcrumb";
-import Card from "react-bootstrap/Card";
 import AppNavbar from "../components/common/AppNavbar";
 import CreatingStackFrom from "../components/files/CreatingStackForm";
+import CreatingFolderForm from "../components/files/CreatingFolderForm";
+import FilesNavbar from "../components/files/FilesNavbar";
+import PopWindow from "../components/common/PopWindow";
 
 export default function Files() {
-  const [isCreatingStack, setIsCreatingStack] = useState(false);
-  const [isCreatingFolder, setIsCreatingFolder] = useState(false);
-
-  const [flashCardName, setFlashCardName] = useState("");
-  const [flashCardDiscripton, setFlashCardDiscription] = useState("");
+  const [showWarning, setShowWarning] = useState(false);
+  const [activeDisplayType, setActiveDisplayType] = useState(null);
+  const [pendingDisplayType, setPendingDisplayType] = useState(null);
 
   function handleCreatingButton(type) {
-    if (type === "stack" && isCreatingFolder) {
-      console.log("Warning");
-    } else if (type === "folder" && isCreatingStack) {
-      console.log("Warning");
+    if (
+      (type === "folder" && activeDisplayType === "stack") ||
+      (type === "stack" && activeDisplayType === "folder")
+    ) {
+      setShowWarning(true);
+      setPendingDisplayType(type);
     } else {
-      if (type === "stack") setIsCreatingStack(true);
-      if (type === "folder") setIsCreatingFolder(true);
+      setActiveDisplayType(type);
+    }
+  }
+
+  function handleWarningButtons(type) {
+    if (!pendingDisplayType || !type) {
+      setShowWarning(false);
+      return;
+    } else {
+      setActiveDisplayType(pendingDisplayType);
+      setPendingDisplayType(null);
+      setShowWarning(false);
     }
   }
 
   return (
     <>
       <AppNavbar />
-      <div
-        className="pt-5 mt-5 d-flex justify-content-between"
-        style={{ margin: "40px" }}
-      >
-        <div>
-          <InputGroup className="">
-            <Button
-              variant="outline-secondary"
-              onClick={() => handleCreatingButton("stack")}
-            >
-              +Karten
-            </Button>
-            <Button
-              variant="outline-secondary"
-              onClick={() => handleCreatingButton("folder")}
-            >
-              +Ordner
-            </Button>
-            <Form.Control
-              className="form-control"
-              style={{ width: "400px" }}
-              aria-label="Example text with two button addons"
-              placeholder="Suchen"
-            />
-          </InputGroup>
-        </div>
-        <div>
-          <Breadcrumb>
-            <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
-            <Breadcrumb.Item href="https://getbootstrap.com/docs/4.0/components/breadcrumb/">
-              Library
-            </Breadcrumb.Item>
-            <Breadcrumb.Item active>Data</Breadcrumb.Item>
-          </Breadcrumb>
-        </div>
-      </div>
-      <CreatingStackFrom />
+      <FilesNavbar onCreateClick={handleCreatingButton} />
+      {activeDisplayType === "stack" && <CreatingStackFrom />}
+      {activeDisplayType === "folder" && <CreatingFolderForm />}
+      <PopWindow show={showWarning} onButtonClick={handleWarningButtons} />
     </>
   );
 }
