@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { apiFetch, getToken } from "../api";
-import AppNavbar from "../components/AppNavbar";
-import FlashCard from "../components/FlashCard";
+import AppNavbar from "../components/common/AppNavbar";
+import FlashCard from "../components/flashcards/FlashCard";
 
 export default function Home() {
   const [cards, setCards] = useState([]);

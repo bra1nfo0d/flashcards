@@ -1,4 +1,4 @@
-import AppNavbar from "../components/AppNavbar";
+import AppNavbar from "../components/common/AppNavbar";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";

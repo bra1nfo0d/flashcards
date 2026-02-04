@@ -1,4 +1,4 @@
-import AppNavbar from "../components/AppNavbar";
+import AppNavbar from "../components/common/AppNavbar";
 
 export default function Library() {
   return (
