@@ -1,3 +1,5 @@
+const initDbContent = require("./initDbContent");
+
 function initDb(db) {
   db.exec(`
       CREATE TABLE IF NOT EXISTS users (
@@ -23,6 +25,8 @@ function initDb(db) {
         FOREIGN KEY (stack_id) REFERENCES stacks(id)
       );
     `);
+  
+  initDbContent(db);
 }
 
 module.exports = initDb;

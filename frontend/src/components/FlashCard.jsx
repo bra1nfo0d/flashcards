@@ -1,84 +1,17 @@
-import { useState, useMemo } from "react";
+import { useState, useEffect } from "react";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/esm/Button";
 import ProgressBar from "react-bootstrap/ProgressBar";
 
-const introFalshCards = [
-  {
-    id: 1,
-    frontTitel: "Frontseite",
-    frontText: "Text 1",
-    backTitle: "Rueckseite",
-    backText: "Antwort 1",
-  },
-  {
-    id: 2,
-    frontTitel: "Frontseite",
-    frontText: "Text 2",
-    backTitle: "Rueckseite",
-    backText: "Antwort 2",
-  },
-  {
-    id: 3,
-    frontTitel: "Frontseite",
-    frontText: "Text 3",
-    backTitle: "Rueckseite",
-    backText: "Antwort 3",
-  },
-  {
-    id: 4,
-    frontTitel: "Frontseite",
-    frontText: "Text 4",
-    backTitle: "Rueckseite",
-    backText: "Antwort 4",
-  },
-  {
-    id: 5,
-    frontTitel: "Frontseite",
-    frontText: "Text 5",
-    backTitle: "Rueckseite",
-    backText: "Antwort 5",
-  },
-  {
-    id: 6,
-    frontTitel: "Frontseite",
-    frontText: "Text 6",
-    backTitle: "Rueckseite",
-    backText: "Antwort 6",
-  },
-  {
-    id: 7,
-    frontTitel: "Frontseite",
-    frontText: "Text 7",
-    backTitle: "Rueckseite",
-    backText: "Antwort 7",
-  },
-  {
-    id: 8,
-    frontTitel: "Frontseite",
-    frontText: "Text 8",
-    backTitle: "Rueckseite",
-    backText: "Antwort 8",
-  },
-  {
-    id: 9,
-    frontTitel: "Frontseite",
-    frontText: "Text 9",
-    backTitle: "Rueckseite",
-    backText: "Antwort 9",
-  },
-  {
-    id: 10,
-    frontTitel: "Frontseite",
-    frontText: "Text 10",
-    backTitle: "Rueckseite",
-    backText: "Antwort 10",
-  },
-];
-
-function FlashCard() {
-  const [queue, setQueue] = useState(introFalshCards);
+function FlashCard({ cards }) {
+  const [queue, setQueue] = useState([]);
   const [isRevealed, setIsRevealed] = useState(false);
+
+  useEffect(() => {
+    setQueue(cards);
+    setIsRevealed(false);
+  }, [cards]);
+
   const current = queue[0];
 
   // perc values
@@ -86,7 +19,7 @@ function FlashCard() {
   const [goodArr, setGoodArr] = useState([]);
   const [hardArr, setHardArr] = useState([]);
   const [wrongArr, setWrongArr] = useState([]);
-  const totalCards = introFalshCards.length;
+  const totalCards = cards.length;
 
   function handleAnswer(type) {
     setIsRevealed(false);
@@ -180,8 +113,8 @@ function FlashCard() {
         <Card border="dark" style={{ width: "30rem" }}>
           <Card.Header>Front Side</Card.Header>
           <Card.Body style={{ minHeight: "160px" }}>
-            <Card.Title>{current.frontTitel}</Card.Title>
-            <Card.Text>{current.frontText}</Card.Text>
+            <Card.Title>{current.front_header}</Card.Title>
+            <Card.Text>{current.front_text}</Card.Text>
           </Card.Body>
         </Card>
 
@@ -192,12 +125,12 @@ function FlashCard() {
             <Card.Title
               style={{ visibility: isRevealed ? "visible" : "hidden" }}
             >
-              {current.backTitle}
+              {current.back_header}
             </Card.Title>
             <Card.Text
               style={{ visibility: isRevealed ? "visible" : "hidden" }}
             >
-              {current.backText}
+              {current.back_text}
             </Card.Text>
           </Card.Body>
         </Card>
@@ -211,8 +144,9 @@ function FlashCard() {
             Reveal
           </Button>
         ) : (
-          <div className="d-flex gap-2">
+          <div className="d-flex gap-2 w-100">
             <Button
+              className="flex-fill"
               variant="primary"
               size="lg"
               onClick={() => handleAnswer("finished")}
@@ -220,6 +154,7 @@ function FlashCard() {
               Fertig
             </Button>
             <Button
+              className="flex-fill"
               variant="success"
               size="lg"
               onClick={() => handleAnswer("good")}
@@ -227,6 +162,7 @@ function FlashCard() {
               Gut
             </Button>
             <Button
+              className="flex-fill"
               variant="warning"
               size="lg"
               onClick={() => handleAnswer("hard")}
@@ -234,6 +170,7 @@ function FlashCard() {
               Schwer
             </Button>
             <Button
+              className="flex-fill"
               variant="danger"
               size="lg"
               onClick={() => handleAnswer("wrong")}
