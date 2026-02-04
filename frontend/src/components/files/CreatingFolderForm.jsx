@@ -3,14 +3,14 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import Card from "react-bootstrap/Card";
-import { createStack } from "../../api/stacks";
+import { createFolder } from "../../api/folders";
 
 export default function CreatingFolderForm() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
 
   async function handleSubmit() {
-    const stack = await createStack({
+    await createFolder({
       name,
       description,
     });
@@ -35,12 +35,12 @@ export default function CreatingFolderForm() {
               <Card.Title>Beschreibung</Card.Title>
               <Form.Control
                 value={description}
-				onChange={(e) => setDescription(e.target.value)}
+                onChange={(e) => setDescription(e.target.value)}
                 as="textarea"
                 aria-label="With textarea"
               />
-              <Button className="mt-3" variant="primary">
-                Bestaetigen
+              <Button onClick={handleSubmit} className="mt-3" variant="primary">
+                Bestätigen
               </Button>
             </Card.Body>
           </Card>
@@ -49,11 +49,8 @@ export default function CreatingFolderForm() {
           <Card border="secondary" style={{ width: "18rem" }}>
             <Card.Header>Ordner</Card.Header>
             <Card.Body>
-              <Card.Title>Ordner Name</Card.Title>
-              <Card.Text>
-                Ordner-Beschreibung. Diese Beschreibung enthaelt den Text von
-                oben.
-              </Card.Text>
+              <Card.Title>{name || "Ordner Name"}</Card.Title>
+              <Card.Text>{description || "Ordner Beschreibung"}</Card.Text>
             </Card.Body>
           </Card>
         </div>

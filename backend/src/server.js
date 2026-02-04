@@ -6,6 +6,7 @@ const initDb = require("./db/initDb");
 const authRoutes = require("./routes/auth.routes");
 const cardsRoutes = require("./routes/cards.routes");
 const stacksRoutes = require("./routes/stacks.routes");
+const foldersRoutes = require("./routes/folders.routes");
 
 const app = express();
 
@@ -22,5 +23,6 @@ initDb(db);
 app.use("/api/auth", authRoutes);
 app.use("/api/cards", cardsRoutes);
 app.use("/api/stacks", stacksRoutes);
+app.use("/api/folders", foldersRoutes);
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
