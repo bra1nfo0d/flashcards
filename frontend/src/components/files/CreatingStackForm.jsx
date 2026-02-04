@@ -3,6 +3,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import Card from "react-bootstrap/Card";
+import CloseButton from "react-bootstrap/CloseButton";
 import { createStack } from "../../api/stacks";
 
 export default function CreatingStackFrom() {
@@ -21,7 +22,12 @@ export default function CreatingStackFrom() {
       <div className="d-flex flex-column align-items-center">
         <div>
           <Card border="primary" style={{ width: "40rem", height: "20rem" }}>
-            <Card.Header>Stapel konfigurieren</Card.Header>
+            <Card.Header>
+              <div className="d-flex justify-content-between">
+                Stapel konfigurieren
+                <CloseButton aria-label="Hide" />
+              </div>
+            </Card.Header>
             <Card.Body>
               <Card.Title>Name</Card.Title>
               <InputGroup className="mb-3">
