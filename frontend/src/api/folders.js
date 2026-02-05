@@ -6,3 +6,9 @@ export function createFolder(data) {
     body: JSON.stringify(data),
   });
 }
+
+export function getAllFolders(data) {
+  return apiFetch("/api/folders/get-all", {
+    method: "GET",
+  });
+}

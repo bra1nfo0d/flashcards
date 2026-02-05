@@ -4,6 +4,7 @@ import CreatingStackFrom from "../components/files/CreatingStackForm";
 import CreatingFolderForm from "../components/files/CreatingFolderForm";
 import CreatingCardForm from "../components/files/CreatingCardForm";
 import FilesNavbar from "../components/files/FilesNavbar";
+import ContentDisplay from "../components/files/ContentDisplay";
 import PopWindow from "../components/common/PopWindow";
 
 export default function Files() {
@@ -44,6 +45,7 @@ export default function Files() {
     <>
       <AppNavbar />
       <FilesNavbar onCreateClick={handleCreatingButton} />
+      {!activeDisplayType && <ContentDisplay />}
       {activeDisplayType === "stack" && (
         <CreatingStackFrom
           onCreated={handleStackCreate}

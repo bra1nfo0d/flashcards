@@ -6,3 +6,9 @@ export function createStack(data) {
     body: JSON.stringify(data),
   });
 }
+
+export function getAllStacks(data) {
+  return apiFetch("/api/stacks/get-all", {
+    method: "GET",
+  });
+}

@@ -30,4 +30,22 @@ router.post("/create", (req, res) => {
   }
 });
 
+router.get("/get-all", (req, res) => {
+  try {
+    const result = db
+      .prepare(
+        `
+      SELECT * FROM folders ORDER BY id`,
+      )
+      .all();
+
+    return res.status(200).json({
+      result,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: "Failed to get all folders" });
+  }
+});
+
 module.exports = router;
