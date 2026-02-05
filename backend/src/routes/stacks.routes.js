@@ -19,7 +19,7 @@ router.post("/create", (req, res) => {
       )
       .run(name, description || "");
 
-    res.json({
+    res.status(201).json({
       id: result.lastInsertRowid,
       name,
       description,

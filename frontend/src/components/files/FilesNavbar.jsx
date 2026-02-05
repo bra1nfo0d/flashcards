@@ -16,7 +16,7 @@ export default function FilesNavbar({ onCreateClick }) {
               variant="outline-secondary"
               onClick={() => onCreateClick("stack")}
             >
-              +Karten
+              +Stapel
             </Button>
             <Button
               variant="outline-secondary"

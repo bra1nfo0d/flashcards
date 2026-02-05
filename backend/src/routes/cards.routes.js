@@ -44,4 +44,8 @@ router.get("/introduction", (req, res) => {
   res.json(cards);
 });
 
+router.post("/create", (req, res) => {
+
+})
+
 module.exports = router;

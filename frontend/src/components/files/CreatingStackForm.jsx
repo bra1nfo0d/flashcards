@@ -6,15 +6,16 @@ import Card from "react-bootstrap/Card";
 import CloseButton from "react-bootstrap/CloseButton";
 import { createStack } from "../../api/stacks";
 
-export default function CreatingStackFrom() {
+export default function CreatingStackFrom({ onCreated, onClose }) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
 
   async function handleSubmit() {
-    await createStack({
+    const created = await createStack({
       name,
       description,
     });
+    onCreated?.(created.id);
   }
 
   return (

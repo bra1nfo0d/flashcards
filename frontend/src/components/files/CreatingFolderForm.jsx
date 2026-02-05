@@ -6,7 +6,7 @@ import Card from "react-bootstrap/Card";
 import CloseButton from "react-bootstrap/CloseButton";
 import { createFolder } from "../../api/folders";
 
-export default function CreatingFolderForm() {
+export default function CreatingFolderForm({ onClose }) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
 
