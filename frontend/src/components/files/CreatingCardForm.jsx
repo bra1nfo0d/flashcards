@@ -46,7 +46,7 @@ export default function CreatingCardForm({ stackId, onClose }) {
             <Card.Header>
               <div className="d-flex justify-content-between">
                 {isFront ? "Frontseite Erstellen" : "Rückseite Erstellen"}
-                <CloseButton aria-label="Hide" />
+                <CloseButton aria-label="Hide" onClick={onClose} />
               </div>
             </Card.Header>
             <Card.Body>

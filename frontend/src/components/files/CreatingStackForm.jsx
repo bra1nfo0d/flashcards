@@ -26,7 +26,7 @@ export default function CreatingStackFrom({ onCreated, onClose }) {
             <Card.Header>
               <div className="d-flex justify-content-between">
                 Stapel konfigurieren
-                <CloseButton aria-label="Hide" />
+                <CloseButton aria-label="Hide" onClick={onClose} />
               </div>
             </Card.Header>
             <Card.Body>
