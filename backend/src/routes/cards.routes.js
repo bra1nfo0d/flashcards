@@ -45,7 +45,32 @@ router.get("/introduction", (req, res) => {
 });
 
 router.post("/create", (req, res) => {
+  const { stackId, frontHeader, frontText, backHeader, backText } = req.body;
 
-})
+  if (!stackId) {
+    return res.status(400).json({ error: "Missing stack id" });
+  }
+
+  if (!frontText || !backText) {
+    return res.status(400).json({ error: "Missing Text" });
+  }
+
+  try {
+    const result = db
+      .prepare(
+        `
+        INSERT INTO flashcards (stack_id, front_header, front_text, back_header, back_text)
+        VALUES (?, ?, ?, ?, ?)`,
+      )
+      .run(stackId, frontHeader || "", frontText, backHeader || "", backText);
+
+    return res.status(200).json({
+      id: result.lastInsertRowid,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: "Failed to create flashcard" });
+  }
+});
 
 module.exports = router;

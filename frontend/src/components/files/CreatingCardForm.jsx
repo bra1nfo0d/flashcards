@@ -4,6 +4,7 @@ import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import Card from "react-bootstrap/Card";
 import CloseButton from "react-bootstrap/CloseButton";
+import { createCard } from "../../api/cards";
 
 export default function CreatingCardForm({ stackId, onClose }) {
   const [frontHeader, setFrontHeader] = useState("");
@@ -18,8 +19,14 @@ export default function CreatingCardForm({ stackId, onClose }) {
   const textValue = isFront ? frontText : backText;
   const setTextValue = isFront ? setFrontText : setBackText;
 
-  function handleSubmit() {
-    console.log({ stackId, frontHeader, frontText, backHeader, backText });
+  async function handleSubmit() {
+    const card = await createCard({
+      stackId,
+      frontHeader,
+      frontText,
+      backHeader,
+      backText,
+    });
   }
 
   function handleConfirmSide() {
