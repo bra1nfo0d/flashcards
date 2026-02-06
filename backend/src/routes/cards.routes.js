@@ -73,4 +73,32 @@ router.post("/create", (req, res) => {
   }
 });
 
+router.get("/by-stack", (req, res) => {
+  const stackId = Number(req.query.stackId);
+
+  if (!stackId) {
+    return res.status(400).json({ error: "stackId required" });
+  }
+
+  try {
+    const result = db
+      .prepare(
+        `
+      SELECT 
+      id, stack_id, front_header, front_text, back_header, back_text 
+      FROM flashcards 
+      WHERE stack_id = ? 
+      ORDER BY id ASC`,
+      )
+      .all(stackId);
+
+    return res.status(200).json({
+      result,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: "Failed to load cards" });
+  }
+});
+
 module.exports = router;

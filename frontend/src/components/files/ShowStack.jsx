@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import { getStackById } from "../../api/stacks";
+import { useNavigate } from "react-router-dom";
 
 export default function ShowStack({ stackId, onBack }) {
+  const navigate = useNavigate();
   const [stack, setStack] = useState(null);
   const [error, setError] = useState("");
 
@@ -35,8 +37,18 @@ export default function ShowStack({ stackId, onBack }) {
             <Card.Title>{stack.name}</Card.Title>
             <Card.Text>{stack.description || "Keine Beschreibung"}</Card.Text>
             <div className="d-flex justify-content-between">
-              <Button variant="outline-primary">Lernen</Button>
-              <Button onClick={onBack} variant="outline-secondary">Zurück</Button>
+              <Button
+                onClick={() => {
+                  localStorage.setItem("learnStackId", stackId);
+                  navigate("/");
+                }}
+                variant="outline-primary"
+              >
+                Lernen
+              </Button>
+              <Button onClick={onBack} variant="outline-secondary">
+                Zurück
+              </Button>
             </div>
           </Card.Body>
         </Card>

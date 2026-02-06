@@ -27,6 +27,12 @@ export default function CreatingCardForm({ stackId, onClose }) {
       backHeader,
       backText,
     });
+
+    setFrontHeader("");
+    setFrontText("");
+    setBackHeader("");
+    setBackText("");
+    setEditSide("front")
   }
 
   function handleConfirmSide() {

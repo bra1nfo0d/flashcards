@@ -15,13 +15,15 @@ export default function Home() {
       setLoading(true);
       setError("");
 
+      const stackId = localStorage.getItem("learnStackId");
+
       try {
-        if (!isLoggedIn) {
-          const intro = await apiFetch("/api/cards/introduction");
-          setCards(intro);
+        if (stackId) {
+          const data = await apiFetch(`/api/cards/by-stack?stackId=${stackId}`);
+          setCards(data.result ?? data);
         } else {
           const intro = await apiFetch("/api/cards/introduction");
-          setCards(intro);
+          setCards(intro.result ?? intro);
         }
       } catch (err) {
         setError(err.message);
