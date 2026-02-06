@@ -12,3 +12,9 @@ export function getAllFolders(data) {
     method: "GET",
   });
 }
+
+export function deleteFolder(id) {
+  return apiFetch(`/api/folders/${id}`, {
+    method: "DELETE",
+  });
+}

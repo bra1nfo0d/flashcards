@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { Pencil } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import Card from "react-bootstrap/Card";
-import { getAllFolders } from "../../api/folders";
-import { getAllStacks } from "../../api/stacks";
+import { getAllFolders, deleteFolder } from "../../api/folders";
+import { getAllStacks, deleteStack } from "../../api/stacks";
 
 export default function ContentDisplay({ onStackClick }) {
   const [folders, setFolders] = useState([]);
@@ -22,6 +22,16 @@ export default function ContentDisplay({ onStackClick }) {
     getAllContent();
   }, []);
 
+  async function handleDeleteFolder(id) {
+    await deleteFolder(id);
+    setFolders((prev) => prev.filter((s) => s.id !== id));
+  }
+
+  async function handleDeleteStack(id) {
+    await deleteStack(id);
+    setStacks((prev) => prev.filter((s) => s.id !== id));
+  }
+
   return (
     <>
       <div className="d-flex flex-wrap gap-3 justify-content-center">
@@ -30,10 +40,10 @@ export default function ContentDisplay({ onStackClick }) {
             <Card.Header>
               <div className="d-flex justify-content-between">
                 Ordner
-                <Pencil
+                <Trash2
                   size={15}
                   style={{ cursor: "pointer" }}
-                  onClick={() => console.log("edit Folder")}
+                  onClick={() => handleDeleteFolder(folder.id)}
                 />
               </div>
             </Card.Header>
@@ -55,10 +65,10 @@ export default function ContentDisplay({ onStackClick }) {
             <Card.Header>
               <div className="d-flex justify-content-between">
                 Stapel
-                <Pencil
+                <Trash2
                   size={15}
                   style={{ cursor: "pointer" }}
-                  onClick={() => console.log("edit Folder")}
+                  onClick={() => handleDeleteStack(stack.id)}
                 />
               </div>
             </Card.Header>

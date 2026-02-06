@@ -48,4 +48,20 @@ router.get("/get-all", (req, res) => {
   }
 });
 
+router.delete("/:id", (req, res) => {
+  const id = Number(req.params.id);
+
+  if (!id) {
+    return res.status(400).json({ error: "Folder id required" });
+  }
+
+  try {
+    db.prepare("DELETE FROM folders WHERE id = ?").run(id);
+
+    return res.status(200).json({ success: true });
+  } catch (err) {
+    return res.status(500).json({ error: "Delete failed" });
+  }
+});
+
 module.exports = router;
