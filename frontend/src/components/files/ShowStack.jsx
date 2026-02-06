@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Card from "react-bootstrap/Card";
+import Button from "react-bootstrap/Button";
 import { getStackById } from "../../api/stacks";
 
 export default function ShowStack({ stackId, onBack }) {
@@ -33,6 +34,10 @@ export default function ShowStack({ stackId, onBack }) {
           <Card.Body>
             <Card.Title>{stack.name}</Card.Title>
             <Card.Text>{stack.description || "Keine Beschreibung"}</Card.Text>
+            <div className="d-flex justify-content-between">
+              <Button variant="outline-primary">Lernen</Button>
+              <Button onClick={onBack} variant="outline-secondary">Zurück</Button>
+            </div>
           </Card.Body>
         </Card>
       </div>
