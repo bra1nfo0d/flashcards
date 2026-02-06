@@ -18,3 +18,9 @@ export function getStackById(id) {
     method: "GET",
   });
 }
+
+export function deleteStack(id) {
+  return apiFetch(`/api/stacks/${id}`, {
+    method: "DELETE",
+  });
+}

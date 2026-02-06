@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
-import { getStackById } from "../../api/stacks";
+import CloseButton from "react-bootstrap/CloseButton";
+import { getStackById, deleteStack } from "../../api/stacks";
 import { useNavigate } from "react-router-dom";
 
 export default function ShowStack({ stackId, onBack }) {
@@ -32,7 +33,12 @@ export default function ShowStack({ stackId, onBack }) {
     <>
       <div className="d-flex flex-column align-items-center">
         <Card border="primary" style={{ width: "18rem" }}>
-          <Card.Header>Stapel</Card.Header>
+          <Card.Header>
+            <div className="d-flex justify-content-between">
+              Stapel
+              <CloseButton aria-label="Hide" onClick={onBack} />
+            </div>
+          </Card.Header>
           <Card.Body>
             <Card.Title>{stack.name}</Card.Title>
             <Card.Text>{stack.description || "Keine Beschreibung"}</Card.Text>
@@ -46,8 +52,20 @@ export default function ShowStack({ stackId, onBack }) {
               >
                 Lernen
               </Button>
-              <Button onClick={onBack} variant="outline-secondary">
-                Zurück
+              <Button
+                onClick={async () => {
+                  if (!window.confirm("Stapel wirklich löschen?")) return;
+
+                  try {
+                    await deleteStack(stackId);
+                    onBack();
+                  } catch (err) {
+                    alert("Delete failed");
+                  }
+                }}
+                variant="outline-danger"
+              >
+                Löschen
               </Button>
             </div>
           </Card.Body>

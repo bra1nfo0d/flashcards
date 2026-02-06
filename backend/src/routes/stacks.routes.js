@@ -72,4 +72,21 @@ router.get("/:id", (req, res) => {
   }
 });
 
+router.delete("/:id", (req, res) => {
+  const id = Number(req.params.id);
+
+  if (!id) {
+    return res.status(400).json({ error: "Stack id required" });
+  }
+
+  try {
+    db.prepare("DELETE FROM flashcards WHERE stack_id = ?").run(id);
+    db.prepare("DELETE FROM stacks WHERE id = ?").run(id);
+
+    return res.status(200).json({ success: true });
+  } catch (err) {
+    return res.status(500).json({ error: "Delete failed" });
+  }
+});
+
 module.exports = router;
