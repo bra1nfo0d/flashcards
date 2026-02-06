@@ -3,7 +3,7 @@ import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import Breadcrumb from "react-bootstrap/Breadcrumb";
 
-export default function FilesNavbar({ onCreateClick }) {
+export default function FilesNavbar({ onCreateClick, selectedFolderId }) {
   return (
     <>
       <div

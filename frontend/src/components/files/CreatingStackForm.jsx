@@ -6,7 +6,7 @@ import Card from "react-bootstrap/Card";
 import CloseButton from "react-bootstrap/CloseButton";
 import { createStack } from "../../api/stacks";
 
-export default function CreatingStackFrom({ onCreated, onClose }) {
+export default function CreatingStackFrom({ onCreated, onClose, folderId }) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
 
@@ -14,6 +14,7 @@ export default function CreatingStackFrom({ onCreated, onClose }) {
     const created = await createStack({
       name,
       description,
+      folder_id: folderId,
     });
     onCreated?.(created.id);
   }

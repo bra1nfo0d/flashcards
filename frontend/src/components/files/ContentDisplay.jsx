@@ -1,10 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Trash2 } from "lucide-react";
 import Card from "react-bootstrap/Card";
 import { getAllFolders, deleteFolder } from "../../api/folders";
 import { getAllStacks, deleteStack } from "../../api/stacks";
 
-export default function ContentDisplay({ onStackClick }) {
+export default function ContentDisplay({
+  onStackClick,
+  selectedFolderId,
+  onFolderSelected,
+  key,
+}) {
   const [folders, setFolders] = useState([]);
   const [stacks, setStacks] = useState([]);
 
@@ -25,6 +30,8 @@ export default function ContentDisplay({ onStackClick }) {
   async function handleDeleteFolder(id) {
     await deleteFolder(id);
     setFolders((prev) => prev.filter((s) => s.id !== id));
+
+    if (selectedFolderId === id) onFolderSelected(null);
   }
 
   async function handleDeleteStack(id) {
@@ -32,10 +39,26 @@ export default function ContentDisplay({ onStackClick }) {
     setStacks((prev) => prev.filter((s) => s.id !== id));
   }
 
+  const visibleFolders = useMemo(() => {
+    return folders.filter((f) =>
+      selectedFolderId === null
+        ? f.parent_folder_id == null
+        : f.parent_folder_id === selectedFolderId,
+    );
+  }, [folders, selectedFolderId]);
+
+  const visibleStacks = useMemo(() => {
+    return stacks.filter((s) =>
+      selectedFolderId === null
+        ? s.folder_id == null
+        : s.folder_id === selectedFolderId,
+    );
+  }, [stacks, selectedFolderId]);
+
   return (
     <>
       <div className="d-flex flex-wrap gap-3 justify-content-center">
-        {folders.map((folder) => (
+        {visibleFolders.map((folder) => (
           <Card key={folder.id} border="primary" style={{ width: "18rem" }}>
             <Card.Header>
               <div className="d-flex justify-content-between">
@@ -49,7 +72,7 @@ export default function ContentDisplay({ onStackClick }) {
             </Card.Header>
             <Card.Body
               style={{ cursor: "pointer" }}
-              onClick={() => onStackClick?.(folder.id)}
+              onClick={() => onFolderSelected(folder.id)}
               className="shadow-sm"
             >
               <Card.Title>{folder.name}</Card.Title>
@@ -60,7 +83,7 @@ export default function ContentDisplay({ onStackClick }) {
           </Card>
         ))}
 
-        {stacks.map((stack) => (
+        {visibleStacks.map((stack) => (
           <Card key={stack.id} border="primary" style={{ width: "18rem" }}>
             <Card.Header>
               <div className="d-flex justify-content-between">

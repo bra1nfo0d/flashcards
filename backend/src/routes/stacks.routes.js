@@ -4,7 +4,7 @@ const db = require("../db");
 const router = express.Router();
 
 router.post("/create", (req, res) => {
-  const { name, description } = req.body;
+  const { folder_id, name, description } = req.body;
 
   if (!name || !name.trim()) {
     return res.status(400).json({ error: "Stack name required" });
@@ -14,10 +14,10 @@ router.post("/create", (req, res) => {
     const result = db
       .prepare(
         `
-	  INSERT INTO stacks (name, description)
-	  VALUES (?, ?)`,
+	  INSERT INTO stacks (folder_id, name, description)
+	  VALUES (?, ?, ?)`,
       )
-      .run(name, description || "");
+      .run(folder_id ?? null, name, description || "");
 
     res.status(201).json({
       id: result.lastInsertRowid,

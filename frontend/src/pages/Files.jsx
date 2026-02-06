@@ -12,9 +12,11 @@ export default function Files() {
   const [showWarning, setShowWarning] = useState(false);
   const [activeDisplayType, setActiveDisplayType] = useState(null);
   const [pendingDisplayType, setPendingDisplayType] = useState(null);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const [activeStackId, setActiveStackId] = useState(null);
   const [selectedStackId, setSelectedStackId] = useState(null);
+  const [selectedFolderId, setSelectedFolderId] = useState(null);
 
   function handleCreatingButton(type) {
     if (
@@ -52,16 +54,34 @@ export default function Files() {
   return (
     <>
       <AppNavbar />
-      <FilesNavbar onCreateClick={handleCreatingButton} />
-      {!activeDisplayType && <ContentDisplay onStackClick={handleStackClick} />}
+      <FilesNavbar
+        onCreateClick={handleCreatingButton}
+        selectedFolderId={selectedFolderId}
+      />
+      {!activeDisplayType && (
+        <ContentDisplay
+          onStackClick={handleStackClick}
+          selectedFolderId={selectedFolderId}
+          onFolderSelected={setSelectedFolderId}
+          key={refreshKey}
+        />
+      )}
       {activeDisplayType === "stack" && (
         <CreatingStackFrom
           onCreated={handleStackCreate}
           onClose={() => setActiveDisplayType(null)}
+          folderId={selectedFolderId}
         />
       )}
       {activeDisplayType === "folder" && (
-        <CreatingFolderForm onClose={() => setActiveDisplayType(null)} />
+        <CreatingFolderForm
+          onClose={() => setActiveDisplayType(null)}
+          parentFolderId={selectedFolderId}
+          onCreate={(id) => {
+            setRefreshKey((k) => k + 1);
+            handleStackCreate(id);
+          }}
+        />
       )}
       {activeDisplayType === "card" && (
         <CreatingCardForm

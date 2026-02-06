@@ -6,15 +6,23 @@ import Card from "react-bootstrap/Card";
 import CloseButton from "react-bootstrap/CloseButton";
 import { createFolder } from "../../api/folders";
 
-export default function CreatingFolderForm({ onClose }) {
+export default function CreatingFolderForm({
+  onClose,
+  parentFolderId,
+  onCreate,
+}) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
 
   async function handleSubmit() {
-    await createFolder({
+    const created = await createFolder({
       name,
       description,
+      parent_folder_id: parentFolderId,
     });
+
+    onCreate?.(created);
+    onClose?.();
   }
 
   return (
@@ -25,7 +33,7 @@ export default function CreatingFolderForm({ onClose }) {
             <Card.Header>
               <div className="d-flex justify-content-between">
                 Ordner konfigurieren
-                <CloseButton aria-label="Hide" onClick={onClose}/>
+                <CloseButton aria-label="Hide" onClick={onClose} />
               </div>
             </Card.Header>
             <Card.Body>
