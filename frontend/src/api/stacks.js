@@ -12,3 +12,9 @@ export function getAllStacks(data) {
     method: "GET",
   });
 }
+
+export function getStackById(id) {
+  return apiFetch(`/api/stacks/${id}`, {
+    method: "GET",
+  });
+}

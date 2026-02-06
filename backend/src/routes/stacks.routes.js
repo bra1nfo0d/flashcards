@@ -48,4 +48,28 @@ router.get("/get-all", (req, res) => {
   }
 });
 
+router.get("/:id", (req, res) => {
+  const id = req.params.id;
+
+  if (!id) {
+    return res.status(400).json({ error: "id is requiered" });
+  }
+
+  try {
+    const stack = db
+      .prepare(
+        `
+      SELECT * FROM stacks WHERE id = ?`,
+      )
+      .get(id);
+
+    return res.status(200).json({
+      result: stack,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: "Failed to get stack" });
+  }
+});
+
 module.exports = router;

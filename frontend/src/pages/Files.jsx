@@ -6,12 +6,15 @@ import CreatingCardForm from "../components/files/CreatingCardForm";
 import FilesNavbar from "../components/files/FilesNavbar";
 import ContentDisplay from "../components/files/ContentDisplay";
 import PopWindow from "../components/common/PopWindow";
+import ShowStack from "../components/files/ShowStack";
 
 export default function Files() {
   const [showWarning, setShowWarning] = useState(false);
   const [activeDisplayType, setActiveDisplayType] = useState(null);
   const [pendingDisplayType, setPendingDisplayType] = useState(null);
+
   const [activeStackId, setActiveStackId] = useState(null);
+  const [selectedStackId, setSelectedStackId] = useState(null);
 
   function handleCreatingButton(type) {
     if (
@@ -41,11 +44,16 @@ export default function Files() {
     setActiveDisplayType("card");
   }
 
+  function handleStackClick(stackId) {
+    setSelectedStackId(stackId);
+    setActiveDisplayType("showStack");
+  }
+
   return (
     <>
       <AppNavbar />
       <FilesNavbar onCreateClick={handleCreatingButton} />
-      {!activeDisplayType && <ContentDisplay />}
+      {!activeDisplayType && <ContentDisplay onStackClick={handleStackClick} />}
       {activeDisplayType === "stack" && (
         <CreatingStackFrom
           onCreated={handleStackCreate}
@@ -59,6 +67,15 @@ export default function Files() {
         <CreatingCardForm
           stackId={activeStackId}
           onClose={() => setActiveDisplayType(null)}
+        />
+      )}
+      {activeDisplayType === "showStack" && selectedStackId && (
+        <ShowStack
+          stackId={selectedStackId}
+          onBack={() => {
+            setActiveStackId(null);
+            setActiveDisplayType(null);
+          }}
         />
       )}
       <PopWindow show={showWarning} onButtonClick={handleWarningButtons} />
